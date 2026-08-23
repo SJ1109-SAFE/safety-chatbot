@@ -7,9 +7,8 @@ st.set_page_config(page_title="스마트 안전관리비 판독기", page_icon="
 st.title("👷‍♂️ 스마트 안전관리비 판독기")
 st.markdown("산안비 및 건설안전 기준 비용 판정 전문가 시스템입니다. 무엇이든 물어보세요!")
 
-# API 키 내장 설정 (보여주신 키가 코드에 자동으로 작동하도록 반영 완료)
+# API 키 설정
 GOOGLE_API_KEY = "AQ.Ab8RN6L8BsSiKExszJAW7jsmm_d-HpQAGI5JiQ6XYYWudZIq-Q"
-
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 시스템 지침(프롬프트) 설정
@@ -26,7 +25,7 @@ system_instruction = """
 - 핵심 근거: 1~2줄로 핵심 조건과 법적 근거 요약
 """
 
-# 모델 불러오기 (Gemini 1.5 Flash)
+# 모델 이름 변경 (가장 안정적인 최신 기본 모델명 적용)
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction=system_instruction
