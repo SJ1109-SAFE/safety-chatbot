@@ -25,26 +25,36 @@ system_instruction = """
 - 핵심 근거: 1~2줄로 핵심 조건과 법적 근거 요약
 """
 
-# 모델 명칭을 최신 표준인 gemini-2.5-flash로 변경
+# 가장 호환성이 높은 기본 모델 호출 방식 적용
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
+    model_name="gemini-1.5-flash",
     system_instruction=system_instruction
 )
 
-if "chat" not in st.session_state:
-    st.session_state.chat = model.start_chat(history=[])
+# 대화 기록 세션 초기화
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# 대화 내용 화면에 출력
-for message in st.session_state.chat.history:
-    with st.chat_message("user" if message.role == "user" else "model"):
-        st.markdown(message.parts[0].text)
+# 이전 대화 화면에 출력
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # 사용자 입력 받기
 if prompt := st.chat_input("현장에서 궁금한 자재나 비용 항목을 입력하세요 (예: 안전모, 이온음료, 타이레놀)"):
+    # 사용자 메시지 저장 및 출력
+    st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    with st.chat_message("model"):
+    # AI 응답 생성
+    with st.chat_message("assistant"):
         with st.spinner("기술사 검토 중..."):
-            response = st.session_state.chat.send_message(prompt)
-            st.markdown(response.text)
+            try:
+                # 단일 프롬프트 전송 방식으로 안정성 극대화
+                response = model.generate_content(prompt)
+                ai_response = response.text
+                st.markdown(ai_response)
+                st.session_state.messages.append({"role": "assistant", "content": ai_response})
+            except Exception as e:
+                st.error(f"오류가 발생했습니다: {e}")
