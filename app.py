@@ -7,8 +7,10 @@ st.set_page_config(page_title="스마트 안전관리비 판독기", page_icon="
 st.title("👷‍♂️ 스마트 안전관리비 판독기")
 st.markdown("산안비 및 건설안전 기준 비용 판정 전문가 시스템입니다. 무엇이든 물어보세요!")
 
-# API 키 설정
+# 현재 발급받으신 프로젝트 연동형 토큰 입력
 GOOGLE_API_KEY = "AQ.Ab8RN6Jf9BCQ3Yd_7bg482Py-cHOVvVmMhtCIZmtdhk32qqESw"
+
+# 프로젝트 인증 규격에 맞추어 클라이언트 설정
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 시스템 지침(프롬프트) 설정
@@ -25,11 +27,17 @@ system_instruction = """
 - 핵심 근거: 1~2줄로 핵심 조건과 법적 근거 요약
 """
 
-# 모델 명칭을 현재 활성화된 최신 표준 모델인 gemini-2.5-flash로 지정
-model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
-    system_instruction=system_instruction
-)
+# 모델 명칭 설정 (최신 gemini-1.5-flash 활용)
+try:
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        system_instruction=system_instruction
+    )
+except Exception:
+    model = genai.GenerativeModel(
+        model_name="models/gemini-1.5-flash",
+        system_instruction=system_instruction
+    )
 
 # 대화 기록 세션 초기화
 if "messages" not in st.session_state:
