@@ -25,9 +25,9 @@ system_instruction = """
 - 핵심 근거: 1~2줄로 핵심 조건과 법적 근거 요약
 """
 
-# 모델 명칭에 'models/' 표준 경로 명시
+# 모델 명칭을 최신 표준인 gemini-2.5-flash로 변경
 model = genai.GenerativeModel(
-    model_name="models/gemini-1.5-flash",
+    model_name="gemini-2.5-flash",
     system_instruction=system_instruction
 )
 
