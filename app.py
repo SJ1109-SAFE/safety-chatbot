@@ -8,7 +8,7 @@ st.title("👷‍♂️ 스마트 안전관리비 판독기")
 st.markdown("산안비 및 건설안전 기준 비용 판정 전문가 시스템입니다. 무엇이든 물어보세요!")
 
 # API 키 설정
-GOOGLE_API_KEY = "AQ.Ab8RN6L8BsSiKExszJAW7jsmm_d-HpQAGI5JiQ6XYYWudZIq-Q"
+GOOGLE_API_KEY = "AQ.Ab8RN6Jf9BCQ3Yd_7bg482Py-cHOVvVmMhtCIZmtdhk32qqESw"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 시스템 지침(프롬프트) 설정
@@ -21,13 +21,13 @@ system_instruction = """
 ### [비용 답변 양식]
 - 분류: 산안비
 - 판정: 구매(채용) 가능 (또는 구매 불가, 조건부 가능 중 택일)
-- 계상 항목: 고시 기준 대표 항목명만 기재 (예: 근로자 건강장해예방비)
+- 계상 항목: 고시 기준 대표 항목명만 기재 (예: 구급 및 보건 관리비, 안전시설비 등)
 - 핵심 근거: 1~2줄로 핵심 조건과 법적 근거 요약
 """
 
-# 가장 호환성이 높은 기본 모델 호출 방식 적용
+# 모델 명칭을 현재 활성화된 최신 표준 모델인 gemini-2.5-flash로 지정
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name="gemini-2.5-flash",
     system_instruction=system_instruction
 )
 
@@ -42,16 +42,13 @@ for message in st.session_state.messages:
 
 # 사용자 입력 받기
 if prompt := st.chat_input("현장에서 궁금한 자재나 비용 항목을 입력하세요 (예: 안전모, 이온음료, 타이레놀)"):
-    # 사용자 메시지 저장 및 출력
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    # AI 응답 생성
     with st.chat_message("assistant"):
         with st.spinner("기술사 검토 중..."):
             try:
-                # 단일 프롬프트 전송 방식으로 안정성 극대화
                 response = model.generate_content(prompt)
                 ai_response = response.text
                 st.markdown(ai_response)
