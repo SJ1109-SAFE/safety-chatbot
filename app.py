@@ -43,7 +43,7 @@ if prompt := st.chat_input("현장에서 궁금한 자재나 비용 항목을 �
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": prompt}
                     ],
-                    model="llama-3.1-8b-instant",  # 현역 지원 모델로 교체 완료
+                    model="openai/gpt-oss-20b",  # Groq 최신 지원 모델 반영
                 )
                 ai_response = chat_completion.choices[0].message.content
                 st.markdown(ai_response)
