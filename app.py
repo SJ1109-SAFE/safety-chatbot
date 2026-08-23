@@ -43,7 +43,7 @@ if prompt := st.chat_input("현장에서 궁금한 자재나 비용 항목을 �
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": prompt}
                     ],
-                    model="llama-3.3-70b-versatile",
+                    model="llama3-8b-8192",
                 )
                 ai_response = chat_completion.choices[0].message.content
                 st.markdown(ai_response)
